@@ -2,7 +2,7 @@
 
 namespace xuezhitech\xpyun;
 
-use mysql_xdevapi\Exception;
+use Exception;
 use xuezhitech\xpyun\Util\Curl;
 
 class Printer
@@ -22,7 +22,7 @@ class Printer
         'user'=>'',
         'key'=>'',
         'debug'=>'0',
-        'header'=>'Content-Type:application/json;charset=UTF-8',
+        'header'=>['Content-Type:application/json','charset=UTF-8'],
     ];
 
     public function __construct( $config=[] )
@@ -57,7 +57,7 @@ class Printer
             'debug' => $this->config['debug'],
             'snlist' => $snlist
         ];
-        return json_decode($this->curl->getCurlInfo($url,'POST',$this->config['header'],json_encode($data)));
+        return json_decode($this->curl->getInfo($url,'POST',$this->config['header'],json_encode($data)),true);
     }
 
     /**
@@ -77,7 +77,7 @@ class Printer
             'debug' => $this->config['debug'],
             'sn' => $sn
         ];
-        return json_decode($this->curl->getCurlInfo($url,'POST',$this->config['header'],json_encode($data)));
+        return json_decode($this->curl->getInfo($url,'POST',$this->config['header'],json_encode($data)),true);
     }
 
     /**
@@ -101,7 +101,7 @@ class Printer
             'sn' => $sn,
             'date' => $date, //查询日期，格式yy-MM-dd，如：2019-08-15
         ];
-        return json_decode($this->curl->getCurlInfo($url,'POST',$this->config['header'],json_encode($data)));
+        return json_decode($this->curl->getInfo($url,'POST',$this->config['header'],json_encode($data)),true);
     }
 
     /**
@@ -121,7 +121,7 @@ class Printer
             'debug' => $this->config['debug'],
             'orderId' => $orderId
         ];
-        return json_decode($this->curl->getCurlInfo($url,'POST',$this->config['header'],json_encode($data)));
+        return json_decode($this->curl->getInfo($url,'POST',$this->config['header'],json_encode($data)),true);
     }
 
     /**
@@ -131,7 +131,7 @@ class Printer
     {
         $timestamp = time();
         $url = 'https://open.xpyun.net/api/openapi/xprinter/delPrinterQueue';
-        if ( empty($snlist) ) {
+        if ( empty($sn) ) {
             throw new Exception('设备SN为空!');
         }
         $data = [
@@ -141,7 +141,7 @@ class Printer
             'debug' => $this->config['debug'],
             'sn' => $sn
         ];
-        return json_decode($this->curl->getCurlInfo($url,'POST',$this->config['header'],json_encode($data)));
+        return json_decode($this->curl->getInfo($url,'POST',$this->config['header'],json_encode($data)),true);
     }
 
     /**
@@ -165,7 +165,7 @@ class Printer
         if ( isset($snlist['cardno']) ) {
             $data['cardno'] = $snlist['cardno'];
         }
-        return json_decode($this->curl->getCurlInfo($url,'POST',$this->config['header'],json_encode($data)));
+        return json_decode($this->curl->getInfo($url,'POST',$this->config['header'],json_encode($data)),true);
     }
 
     /**
@@ -185,7 +185,7 @@ class Printer
             'debug' => $this->config['debug'],
             'snlist' => $snlist,
         ];
-        return json_decode($this->curl->getCurlInfo($url,'POST',$this->config['header'],json_encode($data)));
+        return json_decode($this->curl->getInfo($url,'POST',$this->config['header'],json_encode($data)),true);
     }
 
     /**
@@ -210,7 +210,7 @@ class Printer
             'content' => $content
         ];
         $data = array_merge($data,$this->print_config);
-        return json_decode($this->curl->getCurlInfo($url,'POST',$this->config['header'],json_encode($data)));
+        return json_decode($this->curl->getInfo($url,'POST',$this->config['header'],json_encode($data)),true);
     }
 
     /**
@@ -232,7 +232,7 @@ class Printer
             'voiceType' => $voiceType,
             'volumeLevel' => $volumeLevel
         ];
-        return json_decode($this->curl->getCurlInfo($url,'POST',$this->config['header'],json_encode($data)));
+        return json_decode($this->curl->getInfo($url,'POST',$this->config['header'],json_encode($data)),true);
     }
 
     /**
@@ -250,9 +250,9 @@ class Printer
             'timestamp'=> $timestamp,
             'sign' => $this->getSign($timestamp),
             'debug' => $this->config['debug'],
-            'items' => json_encode($items),
+            'items' => $items,
         ];
-        return json_decode($this->curl->getCurlInfo($url,'POST',$this->config['header'],json_encode($data)));
+        return json_decode($this->curl->getInfo($url,'POST',$this->config['header'],json_encode($data)),true);
     }
 
     private function getSign(string $timestamp): string

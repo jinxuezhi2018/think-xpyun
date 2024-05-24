@@ -1,10 +1,10 @@
 <?php
 
-namespace xuezhitech\wechat\Util;
+namespace xuezhitech\xpyun\Util;
 
 class Curl
 {
-    public function getInfo($url,$request_type = 'GET',$headers = '',$data=[] ): string
+    public function getInfo($url,$request_type = 'GET',$headers = [],$data=[] ): string
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
